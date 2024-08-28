@@ -1,8 +1,21 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { Mail, Home, Users, Send, List, BarChart2, Inbox, Search, MoreHorizontal, ChevronDown, RefreshCw, ArrowLeft } from 'lucide-react';
-import Image from 'next/image';
+import React, { useState, useEffect } from "react";
+import {
+  Mail,
+  Home,
+  Users,
+  Send,
+  List,
+  BarChart2,
+  Inbox,
+  Search,
+  MoreHorizontal,
+  ChevronDown,
+  RefreshCw,
+  ArrowLeft,
+} from "lucide-react";
+import Image from "next/image";
 
 interface Email {
   id: number;
@@ -24,7 +37,7 @@ interface Email {
 const OneboxPage = () => {
   const [emails, setEmails] = useState<Email[]>([]);
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
-  const [replyContent, setReplyContent] = useState('');
+  const [replyContent, setReplyContent] = useState("");
 
   useEffect(() => {
     fetchEmails();
@@ -32,43 +45,49 @@ const OneboxPage = () => {
 
   const fetchEmails = async () => {
     try {
-      const response = await fetch('https://hiring.reachinbox.xyz/api/v1/onebox/list', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      const response = await fetch(
+        "https://hiring.reachinbox.xyz/api/v1/onebox/list",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
         }
-      });
+      );
       const data = await response.json();
       setEmails(data.data);
     } catch (error) {
-      console.error('Error fetching emails:', error);
+      console.error("Error fetching emails:", error);
     }
   };
 
   const fetchEmailThread = async (threadId: number) => {
     try {
-      const response = await fetch(`https://hiring.reachinbox.xyz/api/v1/onebox/messages/${threadId}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      const response = await fetch(
+        `https://hiring.reachinbox.xyz/api/v1/onebox/messages/${threadId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
         }
-      });
+      );
       const data = await response.json();
       setSelectedEmail(data.data[0]);
     } catch (error) {
-      console.error('Error fetching email thread:', error);
+      console.error("Error fetching email thread:", error);
     }
   };
 
   const resetInbox = async () => {
     try {
-      await fetch('https://hiring.reachinbox.xyz/api/v1/onebox/reset', {
+      await fetch("https://hiring.reachinbox.xyz/api/v1/onebox/reset", {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-        }
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
       });
       fetchEmails();
       setSelectedEmail(null);
     } catch (error) {
-      console.error('Error resetting inbox:', error);
+      console.error("Error resetting inbox:", error);
     }
   };
 
@@ -76,32 +95,38 @@ const OneboxPage = () => {
     if (!selectedEmail) return;
 
     try {
-      const response = await fetch(`https://hiring.reachinbox.xyz/api/v1/onebox/reply/${selectedEmail.threadId}`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          toName: selectedEmail.fromName,
-          to: selectedEmail.fromEmail,
-          from: selectedEmail.toEmail,
-          fromName: selectedEmail.toName,
-          subject: `Re: ${selectedEmail.subject}`,
-          body: `<p>${replyContent}</p>`,
-          references: [...(selectedEmail.references || []), selectedEmail.messageId],
-          inReplyTo: selectedEmail.messageId,
-        }),
-      });
+      const response = await fetch(
+        `https://hiring.reachinbox.xyz/api/v1/onebox/reply/${selectedEmail.threadId}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            toName: selectedEmail.fromName,
+            to: selectedEmail.fromEmail,
+            from: selectedEmail.toEmail,
+            fromName: selectedEmail.toName,
+            subject: `Re: ${selectedEmail.subject}`,
+            body: `<p>${replyContent}</p>`,
+            references: [
+              ...(selectedEmail.references || []),
+              selectedEmail.messageId,
+            ],
+            inReplyTo: selectedEmail.messageId,
+          }),
+        }
+      );
 
       if (response.ok) {
-        setReplyContent('');
+        setReplyContent("");
         fetchEmailThread(selectedEmail.threadId);
       } else {
-        console.error('Failed to send reply');
+        console.error("Failed to send reply");
       }
     } catch (error) {
-      console.error('Error sending reply:', error);
+      console.error("Error sending reply:", error);
     }
   };
 
@@ -133,7 +158,10 @@ const OneboxPage = () => {
         <header className="h-16 bg-black flex items-center justify-between px-6 border-b border-gray-800">
           <h1 className="text-xl font-semibold">Onebox</h1>
           <div className="flex items-center space-x-3">
-            <button onClick={resetInbox} className="p-2 hover:bg-gray-800 rounded-full">
+            <button
+              onClick={resetInbox}
+              className="p-2 hover:bg-gray-800 rounded-full"
+            >
               <RefreshCw size={20} color="#4B5563" />
             </button>
             <div className="flex items-center space-x-2 bg-gray-800 rounded-full px-2 py-1">
@@ -150,14 +178,21 @@ const OneboxPage = () => {
           <div className="w-1/4 border-r border-gray-800">
             <div className="p-4">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-blue-400">All Inbox(s)</h2>
+                <h2 className="text-lg font-semibold text-blue-400">
+                  All Inbox(s)
+                </h2>
                 <div className="flex items-center">
                   <ArrowLeft size={16} color="#4B5563" />
-                  <span className="text-sm text-gray-400 ml-2">25/25 Inboxes selected</span>
+                  <span className="text-sm text-gray-400 ml-2">
+                    25/25 Inboxes selected
+                  </span>
                 </div>
               </div>
               <div className="relative mb-4">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <Search
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  size={20}
+                />
                 <input
                   type="text"
                   placeholder="Search"
@@ -173,16 +208,31 @@ const OneboxPage = () => {
               {emails.map((email) => (
                 <div
                   key={email.id}
-                  className={`p-4 border-b border-gray-800 cursor-pointer hover:bg-gray-900 ${selectedEmail?.id === email.id ? 'bg-gray-900' : ''}`}
+                  className={`p-4 border-b border-gray-800 cursor-pointer hover:bg-gray-900 ${
+                    selectedEmail?.id === email.id ? "bg-gray-900" : ""
+                  }`}
                   onClick={() => fetchEmailThread(email.threadId)}
                 >
                   <div className="flex justify-between items-center mb-1">
                     <span className="font-semibold">{email.fromEmail}</span>
-                    <span className="text-xs text-gray-400">{new Date(email.sentAt).toLocaleString('en-US', { month: 'short', day: 'numeric' })}</span>
+                    <span className="text-xs text-gray-400">
+                      {new Date(email.sentAt).toLocaleString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </span>
                   </div>
-                  <div className="text-sm text-gray-400 truncate mb-2">{email.subject}</div>
+                  <div className="text-sm text-gray-400 truncate mb-2">
+                    {email.subject}
+                  </div>
                   <div className="flex items-center space-x-2">
-                    <span className={`px-2 py-1 rounded-full text-xs ${email.status === 'Interested' ? 'bg-green-900 text-green-300' : 'bg-gray-700 text-gray-300'}`}>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs ${
+                        email.status === "Interested"
+                          ? "bg-green-900 text-green-300"
+                          : "bg-gray-700 text-gray-300"
+                      }`}
+                    >
                       {email.status}
                     </span>
                     <span className="text-xs text-gray-500">Campaign Name</span>
@@ -197,18 +247,30 @@ const OneboxPage = () => {
             {selectedEmail ? (
               <>
                 <div className="p-6 border-b border-gray-800">
-                  <h2 className="text-2xl font-semibold mb-2">{selectedEmail.subject}</h2>
+                  <h2 className="text-2xl font-semibold mb-2">
+                    {selectedEmail.subject}
+                  </h2>
                   <div className="flex justify-between items-center text-sm text-gray-400">
                     <div>
-                      <p>from: {selectedEmail.fromName} &lt;{selectedEmail.fromEmail}&gt;</p>
+                      <p>
+                        from: {selectedEmail.fromName} &lt;
+                        {selectedEmail.fromEmail}&gt;
+                      </p>
                       <p>cc: {selectedEmail.cc}</p>
-                      <p>to: {selectedEmail.toName} &lt;{selectedEmail.toEmail}&gt;</p>
+                      <p>
+                        to: {selectedEmail.toName} &lt;{selectedEmail.toEmail}
+                        &gt;
+                      </p>
                     </div>
-                    <span>{new Date(selectedEmail.sentAt).toLocaleString()}</span>
+                    <span>
+                      {new Date(selectedEmail.sentAt).toLocaleString()}
+                    </span>
                   </div>
                 </div>
                 <div className="flex-1 overflow-y-auto p-6">
-                  <div dangerouslySetInnerHTML={{ __html: selectedEmail.body }} />
+                  <div
+                    dangerouslySetInnerHTML={{ __html: selectedEmail.body }}
+                  />
                 </div>
                 <div className="p-6 border-t border-gray-800">
                   <textarea
