@@ -15,6 +15,7 @@ import {
   RefreshCw,
   ArrowLeft,
   MoreHorizontal,
+  MessageSquare,
 } from 'lucide-react';
 
 interface Email {
@@ -229,17 +230,17 @@ const OneboxPage: React.FC = () => {
             })}</span>
           </div>
           <div className="text-sm text-gray-400 truncate mb-2">{email.subject}</div>
-          <div className="flex items-center space-x-3"> {/* Adjusted spacing */}
-            <div className="relative px-2 py-1 rounded-full bg-[#222426] text-gray-400 flex items-center space-x-2"> {/* Updated color */}
-              <div className="w-2 h-2 bg-green-500 rounded-full absolute left-1 top-1/2 transform -translate-y-1/2" /> {/* Green dot */}
-              <span className="text-xs">Interested</span>
+          <div className="flex items-center space-x-2">
+            <div className="px-2 py-1 rounded-full bg-[#222426] text-emerald-400 text-xs flex items-center space-x-1">
+              <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
+              <span>Interested</span>
             </div>
-            <img
-              src="/campaignlogo.png"
-              alt="Campaign Icon"
-              className="w-4 h-4 bg-[#222426]" 
-            />
-            <span className="text-xs text-gray-500">Campaign Name</span>
+            <div className="px-2 py-1 rounded-full bg-[#222426] text-gray-400 text-xs flex items-center space-x-1">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-gray-400">
+              <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+              <span>Campaign Name</span>
+            </div>
           </div>
         </div>
       ))}
@@ -247,46 +248,61 @@ const OneboxPage: React.FC = () => {
   );
   
   const renderEmailContent = () => (
-    <div className="flex-1 flex flex-col">
+    <div className="flex-1 flex flex-col bg-[#141414] text-white">
       {selectedEmail ? (
         <>
-          <div className="p-6 border-b border-gray-800">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-semibold text-white">{selectedEmail.subject}</h2>
+          <div className="p-4 border-b border-gray-800">
+            <div className="flex justify-between items-center mb-2">
+              <div>
+                <h2 className="text-xl font-semibold">{selectedEmail.fromName}</h2>
+                <p className="text-sm text-gray-400">{selectedEmail.fromEmail}</p>
+              </div>
               <div className="flex space-x-2">
-                <button className="px-3 py-1 bg-gray-800 text-white rounded-md">
-                  Meeting Completed <ChevronDown size={16} className="inline ml-1" />
+                <button className="px-3 py-1 bg-[#222426] text-white rounded-md flex items-center">
+                  <div className="w-2 h-2 bg-yellow-400 rounded-full mr-2"></div>
+                  Meeting Completed <ChevronDown size={16} className="ml-1" />
                 </button>
-                <button className="px-3 py-1 bg-gray-800 text-white rounded-md">
-                  Move <ChevronDown size={16} className="inline ml-1" />
+                <button className="px-3 py-1 bg-[#222426] text-white rounded-md flex items-center">
+                  Move <ChevronDown size={16} className="ml-1" />
                 </button>
-                <button className="p-1 bg-gray-800 text-white rounded-md">
+                <button className="p-1 bg-[#222426] text-white rounded-md">
                   <MoreHorizontal size={20} />
                 </button>
               </div>
             </div>
-            <div className="text-sm text-gray-400">
-              <p>from: {selectedEmail.fromName} &lt;{selectedEmail.fromEmail}&gt;</p>
-              <p>cc: {selectedEmail.cc}</p>
-              <p>to: {selectedEmail.toName} &lt;{selectedEmail.toEmail}&gt;</p>
+          </div>
+          <div className="flex-1 p-4 overflow-y-auto">
+            <div className="bg-[#1e1e1e] rounded-lg p-4 mb-4">
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="text-lg font-semibold">{selectedEmail.subject}</h3>
+                <span className="text-sm text-gray-400">
+                  {new Date(selectedEmail.sentAt).toLocaleString("en-US", {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    hour12: true
+                  })}
+                </span>
+              </div>
+              <div className="text-sm text-gray-400 mb-4">
+                <p>from: {selectedEmail.fromEmail}</p>
+                {selectedEmail.cc && <p>cc: {selectedEmail.cc}</p>}
+                <p>to: {selectedEmail.toEmail}</p>
+              </div>
+              <div className="text-white" dangerouslySetInnerHTML={{ __html: selectedEmail.body }} />
             </div>
+            <button className="bg-[#222426] text-white px-4 py-2 rounded-md flex items-center justify-center w-full">
+              <MessageSquare size={16} className="mr-2" /> View all 4 replies
+            </button>
           </div>
-          <div className="flex-1 p-6 overflow-y-auto">
-            <div className="text-white" dangerouslySetInnerHTML={{ __html: selectedEmail.body }} />
-          </div>
-          <div className="p-6 border-t border-gray-800">
-            <textarea
-              className="w-full bg-gray-800 text-white p-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-              rows={4}
-              placeholder="Type your reply here..."
-              value={replyContent}
-              onChange={(e) => setReplyContent(e.target.value)}
-            ></textarea>
+          <div className="p-4">
             <button
-              className="px-4 py-2 bg-blue-600 text-white rounded-md"
+              className="px-4 py-2 bg-blue-600 text-white rounded-md flex items-center justify-center w-full"
               onClick={replyToEmail}
             >
-              <ArrowLeft size={16} className="inline mr-2" />
+              <ArrowLeft size={16} className="mr-2" />
               Reply
             </button>
           </div>
