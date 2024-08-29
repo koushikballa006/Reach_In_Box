@@ -1,8 +1,7 @@
 "use client";
 
-"use client";
-
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import {
   Mail,
   Home,
@@ -17,7 +16,6 @@ import {
   ArrowLeft,
   MoreHorizontal,
 } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
 
 interface Email {
   id: number;
@@ -229,23 +227,23 @@ const OneboxPage: React.FC = () => {
             })}</span>
           </div>
           <div className="text-sm text-gray-400 truncate mb-2">{email.subject}</div>
-          <div className="flex items-center space-x-2">
-            <span
-              className={`px-2 py-1 rounded-full text-xs ${
-                email.status === 'Interested'
-                  ? 'bg-green-900 text-green-300'
-                  : 'bg-gray-700 text-gray-300'
-              }`}
-            >
-              {email.status}
-            </span>
+          <div className="flex items-center space-x-3"> {/* Adjusted spacing */}
+            <div className="relative px-2 py-1 rounded-full bg-[#222426] text-gray-400 flex items-center space-x-2"> {/* Updated color */}
+              <div className="w-2 h-2 bg-green-500 rounded-full absolute left-1 top-1/2 transform -translate-y-1/2" /> {/* Green dot */}
+              <span className="text-xs">Interested</span>
+            </div>
+            <img
+              src="/campaignlogo.png"
+              alt="Campaign Icon"
+              className="w-4 h-4 bg-[#222426]" 
+            />
             <span className="text-xs text-gray-500">Campaign Name</span>
           </div>
         </div>
       ))}
     </div>
   );
-
+  
   const renderEmailContent = () => (
     <div className="flex-1 flex flex-col">
       {selectedEmail ? (
@@ -255,7 +253,7 @@ const OneboxPage: React.FC = () => {
               <h2 className="text-2xl font-semibold text-white">{selectedEmail.subject}</h2>
               <div className="flex space-x-2">
                 <button className="px-3 py-1 bg-gray-800 text-white rounded-md">
-                  {selectedEmail.status} <ChevronDown size={16} className="inline ml-1" />
+                  Interested <ChevronDown size={16} className="inline ml-1" />
                 </button>
                 <button className="px-3 py-1 bg-gray-800 text-white rounded-md">
                   Move <ChevronDown size={16} className="inline ml-1" />
