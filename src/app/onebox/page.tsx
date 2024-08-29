@@ -19,6 +19,7 @@ import InboxIcon from '../components/icons/InboxIcon';
 import BarChartIcon from '../components/icons/BarchartIcon';
 import EmailContent from '../components/EmailContent';
 import ReplyModal from '../components/ReplyModal';
+import { useTheme } from '../components/theme';
 
 interface Email {
   id: number;
@@ -203,21 +204,32 @@ const OneboxPage: React.FC = () => {
     </aside>
   );
 
-  const renderTopBar = () => (
-    <header className="h-16 bg-black flex items-center justify-between px-6 border-b border-gray-800">
-      <h1 className="text-xl font-semibold text-white">Onebox</h1>
-      <div className="flex items-center space-x-3">
-        <button className="p-2 hover:bg-gray-800 rounded-full" onClick={resetInbox}>
-          <RefreshCw size={20} color="#4B5563" />
-        </button>
-        <div className="flex items-center space-x-2 bg-gray-800 rounded-full px-2 py-1">
-          <span className="w-4 h-4 bg-gray-600 rounded-full"></span>
-          <span className="text-sm text-gray-400">Tim's Workspace</span>
-          <ChevronDown size={16} color="#4B5563" />
+  const renderTopBar = () => {
+    const { toggleTheme } = useTheme();
+  
+    return (
+      <header className="h-16 bg-[#1F1F1F] flex items-center justify-between px-6 border-b border-gray-800">
+        <h1 className="text-xl font-semibold text-white">Onebox</h1>
+        <div className="flex items-center space-x-3">
+          <div className="flex items-center">
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                className="sr-only peer"
+                onChange={toggleTheme}
+              />
+              <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gray-300 dark:peer-focus:ring-gray-600 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            </label>
+          </div>
+          <div className="flex items-center space-x-2 bg-gray-800 rounded-full px-2 py-1">
+            <span className="w-4 h-4 bg-gray-600 rounded-full"></span>
+            <span className="text-sm text-gray-400">Tim's Workspace</span>
+            <ChevronDown size={16} color="#4B5563" />
+          </div>
         </div>
-      </div>
-    </header>
-  );
+      </header>
+    );
+  };
 
   const renderHomeView = () => (
     <div className="flex-1 flex flex-col items-center justify-center bg-black text-white">
@@ -242,7 +254,12 @@ const OneboxPage: React.FC = () => {
             <ChevronDown size={16} className="inline ml-1" />
           </h2>
           <div className="flex items-center text-gray-400 text-sm">
-            <ArrowLeft size={16} className="mr-1" />
+          <button className="p-2 hover:bg-gray-800 rounded-full" onClick={resetInbox}>
+          <RefreshCw size={20} color="#4B5563" />
+        </button>
+          </div>
+          <div className="flex items-center text-gray-400 text-sm">
+            {/* <ArrowLeft size={16} className="mr-1" /> */}
             25/25 Inboxes selected
           </div>
         </div>
