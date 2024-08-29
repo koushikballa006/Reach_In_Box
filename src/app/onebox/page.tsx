@@ -376,7 +376,9 @@ const OneboxPage: React.FC = () => {
 
   const renderLeadDetails = () => (
     <div className="w-1/4 border-l border-gray-800 p-6">
-      <h3 className="text-lg font-semibold text-white mb-4">Lead Details</h3>
+      <h3 className="text-lg font-semibold text-white mb-4">
+        <span className="bg-gray-700 block w-full px-2 py-1 rounded">Lead Details</span>
+      </h3>
       <div className="space-y-4 text-gray-400">
         <div>
           <span className="block">Name</span>
@@ -399,7 +401,9 @@ const OneboxPage: React.FC = () => {
           <p className="text-white">Reachinbox</p>
         </div>
       </div>
-      <h3 className="text-lg font-semibold text-white mt-8 mb-4">Activities</h3>
+      <h3 className="text-lg font-semibold text-white mt-8 mb-4">
+        <span className="bg-gray-700 block w-full px-2 py-1 rounded">Activities</span>
+      </h3>
       <div className="space-y-4">
         <p className="text-gray-400">Campaign Name</p>
         <div className="flex items-center justify-between text-sm text-gray-400">
