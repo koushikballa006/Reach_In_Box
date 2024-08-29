@@ -334,7 +334,7 @@ const OneboxPage: React.FC = () => {
       {selectedEmail ? (
         <EmailContent
           selectedEmail={selectedEmail}
-          openReplyModal={() => setIsReplyModalOpen(true)}
+          // openReplyModal={() => setIsReplyModalOpen(true)}
         />
       ) : (
         <div className="flex-1 flex items-center justify-center text-gray-500">
@@ -422,7 +422,7 @@ const OneboxPage: React.FC = () => {
           )}
         </main>
       </div>
-      <InlineReply
+      <ReplyModal
         isOpen={isReplyModalOpen}
         onClose={() => setIsReplyModalOpen(false)}
         selectedEmail={selectedEmail}
