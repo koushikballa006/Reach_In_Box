@@ -16,7 +16,16 @@ import {
   ArrowLeft,
   MoreHorizontal,
   MessageSquare,
+  BarChartIcon,
 } from 'lucide-react';
+
+import HomeIcon from '../components/icons/HomeIcon';
+import UserIcon from '../components/icons/UsersIcon';
+import EmailIcon from '../components/icons/EmailIcon';
+import SendIcon from '../components/icons/SendIcon';
+import ListIcon from '../components/icons/ListIcon';
+import InboxIcon from '../components/icons/InboxIcon';
+import BarchartIcon from '../components/icons/BarchartIcon';
 
 interface Email {
   id: number;
@@ -138,17 +147,58 @@ const OneboxPage: React.FC = () => {
 
   const renderSidebar = () => (
     <aside className="w-20 bg-black flex flex-col items-center py-6 border-r border-gray-800">
-      <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-black font-bold text-xl mb-8">
-        M
-      </div>
-      <nav className="flex-1 flex flex-col space-y-8">
-        <Home size={24} color={currentView === 'home' ? "#FFFFFF" : "#4B5563"} onClick={() => setCurrentView('home')} />
-        <Users size={24} color="#4B5563" />
-        <Mail size={24} color="#4B5563" />
-        <Send size={24} color="#4B5563" />
-        <List size={24} color="#4B5563" />
-        <Inbox size={24} color={currentView === 'inbox' ? "#FFFFFF" : "#4B5563"} onClick={() => setCurrentView('inbox')} />
-        <BarChart2 size={24} color="#4B5563" />
+      <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center mb-8">
+      <img
+        src="/reachinbox.jpg" 
+        alt="Logo"
+        className="w-full h-full object-cover"
+      />
+    </div>
+      <nav className="flex-1 flex flex-col space-y-8 pt-8">
+        <button
+          className="flex items-center justify-center"
+          onClick={() => setCurrentView('home')}
+          aria-label="Home"
+        >
+          <HomeIcon className={`w-8 h-8 ${currentView === 'home' ? 'text-white' : 'text-gray-500'}`} />
+        </button>
+        <button
+          className="flex items-center justify-center"
+          aria-label="Users"
+        >
+          <UserIcon className="w-8 h-8 text-gray-500" />
+        </button>
+        <button
+          className="flex items-center justify-center"
+          aria-label="Mail"
+        >
+          <EmailIcon className="w-8 h-8 text-gray-500" />
+        </button>
+        <button
+          className="flex items-center justify-center"
+          aria-label="Send"
+        >
+          <SendIcon className="w-8 h-8 text-gray-500" />
+        </button>
+        <button
+          className="flex items-center justify-center"
+          aria-label="List"
+        >
+          <ListIcon className="w-8 h-8 text-gray-500" />
+        </button>
+        <button
+          className="flex items-center justify-center"
+          onClick={() => setCurrentView('inbox')}
+          aria-label="Inbox"
+        >
+          <InboxIcon className={`w-8 h-8 ${currentView === 'inbox' ? 'text-white' : 'text-gray-500'}`} />
+        </button>
+        <button
+          className="flex items-center justify-center"
+          aria-label="Chart"
+        >
+          <BarChartIcon className="w-8 h-8 text-gray-500" />
+        </button>
       </nav>
       <div className="mt-auto">
         <div className="w-12 h-12 bg-green-700 rounded-full flex items-center justify-center text-sm font-semibold">
@@ -157,7 +207,7 @@ const OneboxPage: React.FC = () => {
       </div>
     </aside>
   );
-
+  
   const renderTopBar = () => (
     <header className="h-16 bg-black flex items-center justify-between px-6 border-b border-gray-800">
       <h1 className="text-xl font-semibold text-white">Onebox</h1>
