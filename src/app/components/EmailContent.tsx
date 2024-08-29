@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { ChevronDown, MoreHorizontal } from 'lucide-react';
+import ReplyModal from './ReplyModal';
 
 interface Email {
   id: number;
@@ -20,12 +21,23 @@ interface Email {
 
 interface EmailContentProps {
   selectedEmail: Email;
-  openReplyModal: () => void;
 }
 
-const EmailContent: React.FC<EmailContentProps> = ({ selectedEmail, openReplyModal }) => {
+const EmailContent: React.FC<EmailContentProps> = ({ selectedEmail }) => {
+  const [isReplyModalOpen, setIsReplyModalOpen] = useState(false);
+  const [replyContent, setReplyContent] = useState('');
+  const replyButtonRef = useRef<HTMLButtonElement>(null);
+
+  const openReplyModal = () => setIsReplyModalOpen(true);
+  const closeReplyModal = () => setIsReplyModalOpen(false);
+
+  const handleSendReply = (content: string) => {
+    console.log('Sending reply:', content);
+    closeReplyModal();
+  };
+
   return (
-    <>
+    <div className="relative flex flex-col h-full bg-black">
       <div className="p-6 border-b border-gray-800">
         <div className="flex justify-between items-center mb-4">
           <div>
@@ -49,7 +61,7 @@ const EmailContent: React.FC<EmailContentProps> = ({ selectedEmail, openReplyMod
       <div className="flex-1 p-6 overflow-y-auto">
         <div className="bg-[#1A1A1A] rounded-lg p-4 mb-4">
           <div className="flex justify-between items-center mb-3">
-            <h3 className="text-lg font-semibold">{selectedEmail.subject}</h3>
+            <h3 className="text-lg font-semibold text-white">{selectedEmail.subject}</h3>
             <span className="text-xs text-gray-400">{new Date(selectedEmail.sentAt).toLocaleString("en-US", {
               day: 'numeric',
               month: 'long',
@@ -74,8 +86,9 @@ const EmailContent: React.FC<EmailContentProps> = ({ selectedEmail, openReplyMod
           <div className="flex-grow h-px bg-gray-800"></div>
         </div>
       </div>
-      <div className="px-6 py-4">
+      <div className="px-6 py-4 relative">
         <button
+          ref={replyButtonRef}
           className="px-4 py-2 text-white rounded-md flex items-center justify-center"
           style={{
             width: '100px',
@@ -86,8 +99,25 @@ const EmailContent: React.FC<EmailContentProps> = ({ selectedEmail, openReplyMod
           <img src="/replyarrow.png" alt="Reply" className="mr-2" width="16" height="16" />
           Reply
         </button>
+        {isReplyModalOpen && (
+          <div 
+            className="absolute left-6 right-6"
+            style={{
+              bottom: replyButtonRef.current ? `calc(100% - ${replyButtonRef.current.offsetHeight}px)` : '100%'
+            }}
+          >
+            <ReplyModal
+              isOpen={isReplyModalOpen}
+              onClose={closeReplyModal}
+              selectedEmail={selectedEmail}
+              onSendReply={handleSendReply}
+              replyContent={replyContent}
+              setReplyContent={setReplyContent}
+            />
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 

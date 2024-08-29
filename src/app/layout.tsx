@@ -1,8 +1,12 @@
 "use client";
-import './globals.css';
-import { ThemeProvider } from '../app/components/theme';
+import "./globals.css";
+import { ThemeProvider } from "./components/theme";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <head>
@@ -10,9 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <title>ReachInbox - Create Account</title>
       </head>
       <body>
-        <ThemeProvider>
-          {children}
-        </ThemeProvider>
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );
