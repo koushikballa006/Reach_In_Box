@@ -2,26 +2,16 @@
 
 'use client';
 
-import React, { useEffect } from "react";
-import { useRouter, useSearchParams } from 'next/navigation';
+import React from "react";
+import { useRouter } from 'next/navigation';
 
 export default function Login() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const token = searchParams.get('token');
-    if (token) {
-      console.log('Token received, storing and redirecting...');
-      localStorage.setItem('authToken', token);
-      router.push('/onebox');
-    }
-  }, [searchParams, router]);
 
   const handleGoogleLogin = () => {
     const frontendUrl = 'http://localhost:3000/onebox'; // Update this to your actual frontend URL in production
     const googleLoginUrl = `https://hiring.reachinbox.xyz/api/v1/auth/google-login?redirect_to=${encodeURIComponent(frontendUrl)}`;
-    window.location.href = googleLoginUrl;
+    router.replace(googleLoginUrl);
   };
 
   return (

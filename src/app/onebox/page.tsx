@@ -16,6 +16,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 
 interface Email {
   id: number;
@@ -38,10 +39,13 @@ const OneboxPage = () => {
   const [emails, setEmails] = useState<Email[]>([]);
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
   const [replyContent, setReplyContent] = useState("");
+  const searchParams = useSearchParams();
 
   useEffect(() => {
+    const token = searchParams.get("token") ?? "";
+    sessionStorage.setItem('bearer', token);
     fetchEmails();
-  }, []);
+  }, [searchParams]);
 
   const fetchEmails = async () => {
     try {
@@ -49,7 +53,7 @@ const OneboxPage = () => {
         "https://hiring.reachinbox.xyz/api/v1/onebox/list",
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${sessionStorage.getItem('bearer')}`,
           },
         }
       );
@@ -66,7 +70,7 @@ const OneboxPage = () => {
         `https://hiring.reachinbox.xyz/api/v1/onebox/messages/${threadId}`,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${sessionStorage.getItem('bearer')}`,
           },
         }
       );
@@ -81,7 +85,7 @@ const OneboxPage = () => {
     try {
       await fetch("https://hiring.reachinbox.xyz/api/v1/onebox/reset", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          Authorization: `Bearer ${sessionStorage.getItem("bearer")}`,
         },
       });
       fetchEmails();
@@ -100,22 +104,24 @@ const OneboxPage = () => {
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${sessionStorage.getItem("bearer")}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            toName: selectedEmail.fromName,
-            to: selectedEmail.fromEmail,
-            from: selectedEmail.toEmail,
-            fromName: selectedEmail.toName,
-            subject: `Re: ${selectedEmail.subject}`,
-            body: `<p>${replyContent}</p>`,
-            references: [
-              ...(selectedEmail.references || []),
-              selectedEmail.messageId,
-            ],
-            inReplyTo: selectedEmail.messageId,
-          }),
+          body: JSON.stringify(
+            {
+              toName: selectedEmail.fromName,
+              to: selectedEmail.fromEmail,
+              from: selectedEmail.toEmail,
+              fromName: selectedEmail.toName,
+              subject: `Re: ${selectedEmail.subject}`,
+              body: `<p>${replyContent}</p>`,
+              references: [
+                ...(selectedEmail.references || []),
+                selectedEmail.messageId,
+              ],
+              inReplyTo: selectedEmail.messageId,
+            }
+          ),
         }
       );
 
@@ -208,9 +214,8 @@ const OneboxPage = () => {
               {emails.map((email) => (
                 <div
                   key={email.id}
-                  className={`p-4 border-b border-gray-800 cursor-pointer hover:bg-gray-900 ${
-                    selectedEmail?.id === email.id ? "bg-gray-900" : ""
-                  }`}
+                  className={`p-4 border-b border-gray-800 cursor-pointer hover:bg-gray-900 ${selectedEmail?.id === email.id ? "bg-gray-900" : ""
+                    }`}
                   onClick={() => fetchEmailThread(email.threadId)}
                 >
                   <div className="flex justify-between items-center mb-1">
@@ -227,11 +232,10 @@ const OneboxPage = () => {
                   </div>
                   <div className="flex items-center space-x-2">
                     <span
-                      className={`px-2 py-1 rounded-full text-xs ${
-                        email.status === "Interested"
-                          ? "bg-green-900 text-green-300"
-                          : "bg-gray-700 text-gray-300"
-                      }`}
+                      className={`px-2 py-1 rounded-full text-xs ${email.status === "Interested"
+                        ? "bg-green-900 text-green-300"
+                        : "bg-gray-700 text-gray-300"
+                        }`}
                     >
                       {email.status}
                     </span>
