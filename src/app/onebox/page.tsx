@@ -380,24 +380,24 @@ const OneboxPage: React.FC = () => {
         <span className="bg-[#23272C] block w-full px-2 py-1 rounded">Lead Details</span>
       </h3>
       <div className="space-y-4">
-        <div>
-          <span className="block text-[#FFFFFF]">Name</span>
+        <div className="flex justify-between text-[#FFFFFF]">
+          <span>Name</span>
           <p className="text-[#B9B9B9]">{selectedEmail?.fromName}</p>
         </div>
-        <div>
-          <span className="block text-[#FFFFFF]">Contact No</span>
+        <div className="flex justify-between text-[#FFFFFF]">
+          <span>Contact No</span>
           <p className="text-[#B9B9B9]">+54-9062827869</p>
         </div>
-        <div>
-          <span className="block text-[#FFFFFF]">Email ID</span>
+        <div className="flex justify-between text-[#FFFFFF]">
+          <span>Email ID</span>
           <p className="text-[#B9B9B9]">{selectedEmail?.fromEmail}</p>
         </div>
-        <div>
-          <span className="block text-[#FFFFFF]">LinkedIn</span>
+        <div className="flex justify-between text-[#FFFFFF]">
+          <span>LinkedIn</span>
           <p className="text-[#B9B9B9]">linkedin.com/in/timvadde/</p>
         </div>
-        <div>
-          <span className="block text-[#FFFFFF]">Company Name</span>
+        <div className="flex justify-between text-[#FFFFFF]">
+          <span>Company Name</span>
           <p className="text-[#B9B9B9]">Reachinbox</p>
         </div>
       </div>
@@ -429,7 +429,6 @@ const OneboxPage: React.FC = () => {
     </div>
   );
   
-
   return (
     <div className="flex h-screen bg-black text-white">
       {renderSidebar()}
