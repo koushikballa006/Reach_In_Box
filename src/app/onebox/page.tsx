@@ -379,34 +379,34 @@ const OneboxPage: React.FC = () => {
       <h3 className="text-lg font-semibold text-white mb-4">
         <span className="bg-[#23272C] block w-full px-2 py-1 rounded">Lead Details</span>
       </h3>
-      <div className="space-y-4 text-gray-400">
+      <div className="space-y-4">
         <div>
-          <span className="block">Name</span>
-          <p className="text-white">{selectedEmail?.fromName}</p>
+          <span className="block text-[#FFFFFF]">Name</span>
+          <p className="text-[#B9B9B9]">{selectedEmail?.fromName}</p>
         </div>
         <div>
-          <span className="block">Contact No</span>
-          <p className="text-white">+54-9062827869</p>
+          <span className="block text-[#FFFFFF]">Contact No</span>
+          <p className="text-[#B9B9B9]">+54-9062827869</p>
         </div>
         <div>
-          <span className="block">Email ID</span>
-          <p className="text-white">{selectedEmail?.fromEmail}</p>
+          <span className="block text-[#FFFFFF]">Email ID</span>
+          <p className="text-[#B9B9B9]">{selectedEmail?.fromEmail}</p>
         </div>
         <div>
-          <span className="block">LinkedIn</span>
-          <p className="text-white">linkedin.com/in/timvadde/</p>
+          <span className="block text-[#FFFFFF]">LinkedIn</span>
+          <p className="text-[#B9B9B9]">linkedin.com/in/timvadde/</p>
         </div>
         <div>
-          <span className="block">Company Name</span>
-          <p className="text-white">Reachinbox</p>
+          <span className="block text-[#FFFFFF]">Company Name</span>
+          <p className="text-[#B9B9B9]">Reachinbox</p>
         </div>
       </div>
       <h3 className="text-lg font-semibold text-white mt-8 mb-4">
         <span className="bg-[#23272C] block w-full px-2 py-1 rounded">Activities</span>
       </h3>
       <div className="space-y-4">
-        <p className="text-gray-400">Campaign Name</p>
-        <div className="flex items-center justify-between text-sm text-gray-400">
+        <p className="text-[#FFFFFF]">Campaign Name</p>
+        <div className="flex items-center justify-between text-sm text-[#FFFFFF]">
           <span>3 Steps</span>
           <span>5 Days in Sequence</span>
         </div>
@@ -418,7 +418,7 @@ const OneboxPage: React.FC = () => {
               </div>
               <div>
                 <p className="font-semibold text-white">{step}</p>
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-[#B9B9B9]">
                   {index === 0 ? 'Sent 3rd, Feb' : 'Opened 5th, Feb'}
                 </p>
               </div>
@@ -428,6 +428,7 @@ const OneboxPage: React.FC = () => {
       </div>
     </div>
   );
+  
 
   return (
     <div className="flex h-screen bg-black text-white">
