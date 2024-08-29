@@ -4,19 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
   Mail,
-  Home,
-  Users,
-  Send,
-  List,
-  BarChart2,
-  Inbox,
   Search,
   ChevronDown,
   RefreshCw,
   ArrowLeft,
-  MoreHorizontal,
-  MessageSquare,
-  BarChartIcon,
 } from 'lucide-react';
 
 import HomeIcon from '../components/icons/HomeIcon';
@@ -25,7 +16,9 @@ import EmailIcon from '../components/icons/EmailIcon';
 import SendIcon from '../components/icons/SendIcon';
 import ListIcon from '../components/icons/ListIcon';
 import InboxIcon from '../components/icons/InboxIcon';
-import BarchartIcon from '../components/icons/BarchartIcon';
+import BarChartIcon from '../components/icons/BarchartIcon';
+import EmailContent from '../components/EmailContent';
+import ReplyModal from '../components/ReplyModal';
 
 interface Email {
   id: number;
@@ -50,6 +43,7 @@ const OneboxPage: React.FC = () => {
   const [emails, setEmails] = useState<Email[]>([]);
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
   const [replyContent, setReplyContent] = useState("");
+  const [isReplyModalOpen, setIsReplyModalOpen] = useState(false);
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -106,7 +100,7 @@ const OneboxPage: React.FC = () => {
     }
   };
 
-  const replyToEmail = async () => {
+  const sendReply = async (content: string) => {
     if (!selectedEmail) return;
 
     try {
@@ -124,7 +118,7 @@ const OneboxPage: React.FC = () => {
             from: selectedEmail.toEmail,
             fromName: selectedEmail.toName,
             subject: `Re: ${selectedEmail.subject}`,
-            body: `<p>${replyContent}</p>`,
+            body: `<p>${content}</p>`,
             references: [
               ...(selectedEmail.references || []),
               selectedEmail.messageId,
@@ -137,6 +131,7 @@ const OneboxPage: React.FC = () => {
       if (response.ok) {
         setReplyContent("");
         fetchEmailThread(selectedEmail.threadId);
+        setIsReplyModalOpen(false);
       } else {
         console.error("Failed to send reply");
       }
@@ -148,12 +143,12 @@ const OneboxPage: React.FC = () => {
   const renderSidebar = () => (
     <aside className="w-20 bg-black flex flex-col items-center py-6 border-r border-gray-800">
       <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center mb-8">
-      <img
-        src="/reachinbox.jpg" 
-        alt="Logo"
-        className="w-full h-full object-cover"
-      />
-    </div>
+        <img
+          src="/reachinbox.jpg" 
+          alt="Logo"
+          className="w-full h-full object-cover"
+        />
+      </div>
       <nav className="flex-1 flex flex-col space-y-8 pt-8">
         <button
           className="flex items-center justify-center"
@@ -207,7 +202,7 @@ const OneboxPage: React.FC = () => {
       </div>
     </aside>
   );
-  
+
   const renderTopBar = () => (
     <header className="h-16 bg-black flex items-center justify-between px-6 border-b border-gray-800">
       <h1 className="text-xl font-semibold text-white">Onebox</h1>
@@ -237,7 +232,6 @@ const OneboxPage: React.FC = () => {
       </p>
     </div>
   );
-  
 
   const renderEmailList = () => (
     <div className="w-1/4 border-r border-gray-800 overflow-y-auto">
@@ -297,75 +291,14 @@ const OneboxPage: React.FC = () => {
       ))}
     </div>
   );
-  
+
   const renderEmailContent = () => (
     <div className="flex-1 flex flex-col bg-black text-white">
       {selectedEmail ? (
-        <>
-          <div className="p-6 border-b border-gray-800">
-            <div className="flex justify-between items-center mb-4">
-              <div>
-                <h2 className="text-2xl font-semibold text-white">{selectedEmail.fromName}</h2>
-                <p className="text-sm text-gray-400">{selectedEmail.fromEmail}</p>
-              </div>
-              <div className="flex space-x-2">
-                <button className="px-3 py-1 bg-gray-800 text-white rounded-md flex items-center">
-                  <div className="w-2 h-2 bg-yellow-400 rounded-full mr-2" />
-                  Meeting Completed <ChevronDown size={16} className="ml-1" />
-                </button>
-                <button className="px-3 py-1 bg-gray-800 text-white rounded-md">
-                  Move <ChevronDown size={16} className="inline ml-1" />
-                </button>
-                <button className="p-1 bg-gray-800 text-white rounded-md">
-                  <MoreHorizontal size={20} />
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="flex-1 p-6 overflow-y-auto">
-            <div className="bg-[#1A1A1A] rounded-lg p-4 mb-4">
-              <div className="flex justify-between items-center mb-3">
-                <h3 className="text-lg font-semibold">{selectedEmail.subject}</h3>
-                <span className="text-xs text-gray-400">{new Date(selectedEmail.sentAt).toLocaleString("en-US", {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                  hour: 'numeric',
-                  minute: 'numeric',
-                  hour12: true
-                })}</span>
-              </div>
-              <div className="text-xs text-gray-400 mb-4">
-                <p>from : {selectedEmail.fromEmail} cc : {selectedEmail.cc}</p>
-                <p>to : {selectedEmail.toEmail}</p>
-              </div>
-              <div className="text-sm text-gray-200" dangerouslySetInnerHTML={{ __html: selectedEmail.body }} />
-            </div>
-            <div className="flex items-center justify-center mb-4">
-              <div className="flex-grow h-px bg-gray-800"></div>
-              <button className="mx-4 px-4 py-2 bg-[#222426] text-white rounded-md text-sm flex items-center">
-                {/* Replace with your actual image */}
-                <img src="/view4replies.png" alt="View replies" className="mr-2" width="12" height="12" />
-                View all 4 replies
-              </button>
-              <div className="flex-grow h-px bg-gray-800"></div>
-            </div>
-          </div>
-          <div className="px-6 py-4">
-            <button
-              className="px-4 py-2 text-white rounded-md flex items-center justify-center"
-              style={{
-                width: '100px',
-                background: 'linear-gradient(91.73deg, #4B63DD -2.99%, rgba(5, 36, 191, 0.99) 95.8%)'
-              }}
-              onClick={replyToEmail}
-            >
-              {/* Replace with your actual image */}
-              <img src="/replyarrow.png" alt="Reply" className="mr-2" width="16" height="16" />
-              Reply
-            </button>
-          </div>
-        </>
+        <EmailContent
+          selectedEmail={selectedEmail}
+          openReplyModal={() => setIsReplyModalOpen(true)}
+        />
       ) : (
         <div className="flex-1 flex items-center justify-center text-gray-500">
           Select an email to view its content
@@ -428,7 +361,7 @@ const OneboxPage: React.FC = () => {
       </div>
     </div>
   );
-  
+
   return (
     <div className="flex h-screen bg-black text-white">
       {renderSidebar()}
@@ -446,6 +379,14 @@ const OneboxPage: React.FC = () => {
           )}
         </main>
       </div>
+      <ReplyModal
+        isOpen={isReplyModalOpen}
+        onClose={() => setIsReplyModalOpen(false)}
+        selectedEmail={selectedEmail}
+        onSendReply={sendReply}
+        replyContent={replyContent}
+        setReplyContent={setReplyContent}
+      />
     </div>
   );
 };
