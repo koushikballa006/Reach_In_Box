@@ -405,25 +405,22 @@ const OneboxPage: React.FC = () => {
         <span className="bg-[#23272C] block w-full px-2 py-1 rounded">Activities</span>
       </h3>
       <div className="space-y-4">
-        <p className="text-white">Campaign Name</p>
+        <p className="text-gray-400">Campaign Name</p>
         <div className="flex items-center justify-between text-sm text-gray-400">
           <span>3 Steps</span>
-          <div className="flex-1 h-0.5 bg-gray-600 mx-2"></div>
           <span>5 Days in Sequence</span>
         </div>
         <div className="space-y-6 relative before:absolute before:left-4 before:top-0 before:bottom-0 before:w-0.5 before:bg-gray-700">
-          {[
-            { step: 'Step 1: Email', date: 'Sent 3rd, Feb', icon: 'paper-rocket.jpg' },
-            { step: 'Step 2: Email', date: 'Opened 5th, Feb', icon: 'yellow-mail-open.jpg' },
-            { step: 'Step 3: Email', date: 'Opened 5th, Feb', icon: 'yellow-mail-open.jpg' },
-          ].map(({ step, date, icon }, index) => (
+          {['Step 1: Email', 'Step 2: Email', 'Step 3: Email'].map((step, index) => (
             <div key={index} className="flex items-center space-x-4">
               <div className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center z-10">
-                <img src={`/path/to/${icon}`} alt={step} className="w-4 h-4" />
+                <Mail size={16} color="#FFFFFF" />
               </div>
               <div>
                 <p className="font-semibold text-white">{step}</p>
-                <p className="text-sm text-gray-400">{date}</p>
+                <p className="text-sm text-gray-400">
+                  {index === 0 ? 'Sent 3rd, Feb' : 'Opened 5th, Feb'}
+                </p>
               </div>
             </div>
           ))}
@@ -431,7 +428,6 @@ const OneboxPage: React.FC = () => {
       </div>
     </div>
   );
-  
 
   return (
     <div className="flex h-screen bg-black text-white">
