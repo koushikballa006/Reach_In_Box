@@ -174,9 +174,10 @@ const OneboxPage: React.FC = () => {
 
   const renderHomeView = () => (
     <div className="flex-1 flex flex-col items-center justify-center bg-black text-white">
-      <div className="w-24 h-24 bg-gray-700 rounded-full flex items-center justify-center mb-8">
-        <Mail size={48} color="#FFFFFF" />
-      </div>
+      <div
+        className="w-64 h-64 bg-contain bg-center mb-8"
+        style={{ backgroundImage: `url('/home.png')`, backgroundRepeat: 'no-repeat', borderRadius: '8px' }}
+      />
       <h2 className="text-2xl font-bold mb-4">It's the beginning of a legendary sales pipeline</h2>
       <p className="text-gray-400 text-center">
         When you have inbound E-mails<br />
@@ -184,6 +185,7 @@ const OneboxPage: React.FC = () => {
       </p>
     </div>
   );
+  
 
   const renderEmailList = () => (
     <div className="w-1/4 border-r border-gray-800 overflow-y-auto">
@@ -253,7 +255,7 @@ const OneboxPage: React.FC = () => {
               <h2 className="text-2xl font-semibold text-white">{selectedEmail.subject}</h2>
               <div className="flex space-x-2">
                 <button className="px-3 py-1 bg-gray-800 text-white rounded-md">
-                  Interested <ChevronDown size={16} className="inline ml-1" />
+                  Meeting Completed <ChevronDown size={16} className="inline ml-1" />
                 </button>
                 <button className="px-3 py-1 bg-gray-800 text-white rounded-md">
                   Move <ChevronDown size={16} className="inline ml-1" />
