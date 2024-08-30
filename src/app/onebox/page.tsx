@@ -1,7 +1,12 @@
-// File: src/app/onebox/page.tsx
 'use client';
-import OneboxPage from './OneboxPage'
+
+import React, { Suspense } from 'react';
+import OneboxPage from './OneboxPage';
 
 export default function Page() {
-  return <OneboxPage />
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <OneboxPage />
+    </Suspense>
+  );
 }

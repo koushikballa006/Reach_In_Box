@@ -59,11 +59,13 @@ const OneboxPage: React.FC = () => {
 
   const [token, setToken] = useSessionStorage('bearer', '');
 
-useEffect(() => {
-  const newToken = searchParams.get("token") ?? "";
-  setToken(newToken);
-  fetchEmails();
-}, [searchParams, setToken]);
+  useEffect(() => {
+    const newToken = searchParams?.get("token") ?? "";
+    setToken(newToken);
+    if (newToken) {
+      fetchEmails();
+    }
+  }, [searchParams]);
 
   const fetchEmails = async () => {
     try {
