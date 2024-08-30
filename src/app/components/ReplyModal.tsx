@@ -8,6 +8,7 @@ import {
   Image,
   UserPlus,
   Code,
+  ChevronDown,
 } from "lucide-react";
 
 interface Email {
@@ -41,7 +42,10 @@ const ReplyModal: React.FC<ReplyModalProps> = ({
       style={{ height: "70vh" }}
     >
       <div className="flex flex-col h-full">
-        <div className="flex justify-between items-center p-3 border-b border-[#34383D]">
+        <div
+          className="flex justify-between items-center p-3 border-b border-[#34383D]"
+          style={{ background: "#23272C" }}
+        >
           <h2 className="text-white text-sm font-semibold">Reply</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-white">
             <X size={16} />
@@ -55,12 +59,12 @@ const ReplyModal: React.FC<ReplyModalProps> = ({
             <p className="text-gray-400 py-2 border-b border-[#34383D]">
               From: <span className="text-white">{selectedEmail.fromEmail}</span>
             </p>
-            <p className="text-gray-400 pt-2">
+            <p className="text-gray-400 pt-2 border-b border-[#34383D]">
               Subject: <span className="text-white">{selectedEmail.subject}</span>
             </p>
           </div>
           <textarea
-            className="w-full h-[calc(100%-80px)] bg-[#2B2B2B] text-white rounded-md p-2 resize-none text-sm mt-3"
+            className="w-full h-[calc(100%-80px)] bg-[#1E1E1E] text-white p-2 resize-none text-sm mt-3 border-none"
             value={replyContent}
             onChange={(e) => setReplyContent(e.target.value)}
             placeholder="Hi Jeanne,"
@@ -76,6 +80,7 @@ const ReplyModal: React.FC<ReplyModalProps> = ({
             }}
           >
             Send
+            <ChevronDown size={16} className="ml-1" />
           </button>
           <div className="flex space-x-2">
             <button className="text-gray-400 hover:text-gray-300">
