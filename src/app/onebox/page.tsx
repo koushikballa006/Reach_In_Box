@@ -34,9 +34,9 @@ interface Email {
   replies?: Email[];
 }
 
-const OneboxPage: React.FC = () => {
+const OneboxPage: React.FC<{ initialEmails: Email[] }> = ({ initialEmails }) => {
   const [currentView, setCurrentView] = useState<"home" | "inbox">("home");
-  const [emails, setEmails] = useState<Email[]>([]);
+  const [emails, setEmails] = useState<Email[]>(initialEmails);
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
   const [replyContent, setReplyContent] = useState("");
   const [isReplyModalOpen, setIsReplyModalOpen] = useState(false);
@@ -45,7 +45,9 @@ const OneboxPage: React.FC = () => {
 
   useEffect(() => {
     const token = searchParams.get("token") ?? "";
-    sessionStorage.setItem("bearer", token);
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem("bearer", token);
+    }
     fetchEmails();
   }, [searchParams]);
 
@@ -55,7 +57,7 @@ const OneboxPage: React.FC = () => {
         "https://hiring.reachinbox.xyz/api/v1/onebox/list",
         {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("bearer")}`,
+            Authorization: `Bearer ${typeof window !== 'undefined' ? sessionStorage.getItem("bearer") : ''}`,
           },
         }
       );
@@ -72,7 +74,7 @@ const OneboxPage: React.FC = () => {
         `https://hiring.reachinbox.xyz/api/v1/onebox/messages/${threadId}`,
         {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("bearer")}`,
+            Authorization: `Bearer ${typeof window !== 'undefined' ? sessionStorage.getItem("bearer") : ''}`,
           },
         }
       );
@@ -87,7 +89,7 @@ const OneboxPage: React.FC = () => {
     try {
       await fetch("https://hiring.reachinbox.xyz/api/v1/onebox/reset", {
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("bearer")}`,
+          Authorization: `Bearer ${typeof window !== 'undefined' ? sessionStorage.getItem("bearer") : ''}`,
         },
       });
       fetchEmails();
@@ -106,7 +108,7 @@ const OneboxPage: React.FC = () => {
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("bearer")}`,
+            Authorization: `Bearer ${typeof window !== 'undefined' ? sessionStorage.getItem("bearer") : ''}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -150,7 +152,7 @@ const OneboxPage: React.FC = () => {
       const response = await fetch(`https://hiring.reachinbox.xyz/api/v1/onebox/messages/${selectedEmail.threadId}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${typeof window !== 'undefined' ? sessionStorage.getItem("bearer") : ''}`,
         },
       });
 
@@ -471,3 +473,12 @@ const OneboxPage: React.FC = () => {
   )};
 
 export default OneboxPage;
+
+export async function getServerSideProps() {
+  // You can perform initial data fetching here if needed
+  return {
+    props: {
+      initialEmails: [], // Or fetch initial emails if required
+    },
+  };
+}
