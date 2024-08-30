@@ -35,7 +35,7 @@ interface Email {
 }
 
 const OneboxPage: React.FC = () => {
-  const [currentView, setCurrentView] = useState<"home" | "inbox">("inbox");
+  const [currentView, setCurrentView] = useState<"home" | "inbox">("home");
   const [emails, setEmails] = useState<Email[]>([]);
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
   const [replyContent, setReplyContent] = useState("");
