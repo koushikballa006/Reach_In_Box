@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Mail, Search, ChevronDown, RefreshCw, ArrowLeft } from "lucide-react";
 import HomeIcon from "../components/icons/HomeIcon";
@@ -48,24 +48,33 @@ interface Email {
   replies?: Email[];
 }
 
+function SearchParamsHandler({ onTokenChange }: { onTokenChange: (token: string) => void }) {
+  const searchParams = useSearchParams();
+  
+  useEffect(() => {
+    const newToken = searchParams.get("token") ?? "";
+    onTokenChange(newToken);
+  }, [searchParams, onTokenChange]);
+
+  return null;
+}
+
 const OneboxPage: React.FC = () => {
   const [currentView, setCurrentView] = useState<"home" | "inbox">("home");
   const [emails, setEmails] = useState<Email[]>([]);
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
   const [replyContent, setReplyContent] = useState("");
   const [isReplyModalOpen, setIsReplyModalOpen] = useState(false);
-  const searchParams = useSearchParams();
   const { theme, toggleTheme } = useTheme();
-
   const [token, setToken] = useSessionStorage('bearer', '');
 
-  useEffect(() => {
-    const newToken = searchParams?.get("token") ?? "";
+  
+  const handleTokenChange = (newToken: string) => {
     setToken(newToken);
     if (newToken) {
       fetchEmails();
     }
-  }, [searchParams]);
+  };
 
   const fetchEmails = async () => {
     try {
@@ -461,6 +470,9 @@ const OneboxPage: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-white dark:bg-black text-black dark:text-white">
+      <Suspense fallback={<div>Loading...</div>}>
+        <SearchParamsHandler onTokenChange={handleTokenChange} />
+      </Suspense>
       {renderSidebar()}
       <div className="flex-1 flex flex-col">
         {renderTopBar()}
