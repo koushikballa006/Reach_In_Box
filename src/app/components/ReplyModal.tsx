@@ -10,6 +10,7 @@ import {
   Code,
   ChevronDown,
 } from "lucide-react";
+import { useTheme } from "../components/theme"; // Make sure this path is correct
 
 interface Email {
   fromEmail: string;
@@ -34,43 +35,44 @@ const ReplyModal: React.FC<ReplyModalProps> = ({
   replyContent,
   setReplyContent,
 }) => {
+  const { theme } = useTheme();
+
   if (!isOpen || !selectedEmail) return null;
 
   return (
     <div
-      className="bg-[#1E1E1E] rounded-md shadow-lg overflow-hidden border border-[#41464B]"
+      className={`${theme === 'dark' ? 'bg-[#1E1E1E]' : 'bg-white'} rounded-md shadow-lg overflow-hidden border ${theme === 'dark' ? 'border-[#41464B]' : 'border-gray-300'}`}
       style={{ height: "70vh" }}
     >
       <div className="flex flex-col h-full">
         <div
-          className="flex justify-between items-center p-3 border-b border-[#34383D]"
-          style={{ background: "#23272C" }}
+          className={`flex justify-between items-center p-3 border-b ${theme === 'dark' ? 'border-[#34383D] bg-[#23272C]' : 'border-gray-200 bg-gray-100'}`}
         >
-          <h2 className="text-white text-sm font-semibold">Reply</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white">
+          <h2 className={`${theme === 'dark' ? 'text-white' : 'text-black'} text-sm font-semibold`}>Reply</h2>
+          <button onClick={onClose} className={`${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'}`}>
             <X size={16} />
           </button>
         </div>
         <div className="flex-grow p-3 overflow-hidden">
           <div className="mb-3 text-xs">
-            <p className="text-gray-400 pb-2 border-b border-[#34383D]">
-              To: <span className="text-white">{selectedEmail.toEmail}</span>
+            <p className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} pb-2 border-b ${theme === 'dark' ? 'border-[#34383D]' : 'border-gray-200'}`}>
+              To: <span className={theme === 'dark' ? 'text-white' : 'text-black'}>{selectedEmail.toEmail}</span>
             </p>
-            <p className="text-gray-400 py-2 border-b border-[#34383D]">
-              From: <span className="text-white">{selectedEmail.fromEmail}</span>
+            <p className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} py-2 border-b ${theme === 'dark' ? 'border-[#34383D]' : 'border-gray-200'}`}>
+              From: <span className={theme === 'dark' ? 'text-white' : 'text-black'}>{selectedEmail.fromEmail}</span>
             </p>
-            <p className="text-gray-400 pt-2 border-b border-[#34383D]">
-              Subject: <span className="text-white">{selectedEmail.subject}</span>
+            <p className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} pt-2 border-b ${theme === 'dark' ? 'border-[#34383D]' : 'border-gray-200'}`}>
+              Subject: <span className={theme === 'dark' ? 'text-white' : 'text-black'}>{selectedEmail.subject}</span>
             </p>
           </div>
           <textarea
-            className="w-full h-[calc(100%-80px)] bg-[#1E1E1E] text-white p-2 resize-none text-sm mt-3 border-none"
+            className={`w-full h-[calc(100%-80px)] ${theme === 'dark' ? 'bg-[#1E1E1E] text-white' : 'bg-white text-black'} p-2 resize-none text-sm mt-3 border-none`}
             value={replyContent}
             onChange={(e) => setReplyContent(e.target.value)}
             placeholder="Hi Jeanne,"
           />
         </div>
-        <div className="flex justify-between items-center p-3 border-t border-[#34383D]">
+        <div className={`flex justify-between items-center p-3 border-t ${theme === 'dark' ? 'border-[#34383D]' : 'border-gray-200'}`}>
           <button
             className="px-4 py-2 text-white text-sm rounded-md flex items-center justify-center"
             onClick={() => onSendReply(replyContent)}
@@ -83,27 +85,11 @@ const ReplyModal: React.FC<ReplyModalProps> = ({
             <ChevronDown size={16} className="ml-1" />
           </button>
           <div className="flex space-x-2">
-            <button className="text-gray-400 hover:text-gray-300">
-              <Variable size={16} />
-            </button>
-            <button className="text-gray-400 hover:text-gray-300">
-              <Eye size={16} />
-            </button>
-            <button className="text-gray-400 hover:text-gray-300">
-              <Type size={16} />
-            </button>
-            <button className="text-gray-400 hover:text-gray-300">
-              <Link size={16} />
-            </button>
-            <button className="text-gray-400 hover:text-gray-300">
-              <Image size={16} />
-            </button>
-            <button className="text-gray-400 hover:text-gray-300">
-              <UserPlus size={16} />
-            </button>
-            <button className="text-gray-400 hover:text-gray-300">
-              <Code size={16} />
-            </button>
+            {[Variable, Eye, Type, Link, Image, UserPlus, Code].map((Icon, index) => (
+              <button key={index} className={`${theme === 'dark' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-600 hover:text-gray-800'}`}>
+                <Icon size={16} />
+              </button>
+            ))}
           </div>
         </div>
       </div>
