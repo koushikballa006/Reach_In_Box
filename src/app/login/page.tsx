@@ -1,7 +1,4 @@
-// File: app/login/page.tsx
-
-'use client';
-
+'use client'
 import React from "react";
 import { useRouter } from 'next/navigation';
 
@@ -24,12 +21,15 @@ export default function Login() {
           <h1 className="text-white text-2xl mb-6">Create a new account</h1>
           <button
             onClick={handleGoogleLogin}
-            className="flex items-center justify-center w-full py-3 mb-4 text-white bg-[#2a2a2a] rounded-md hover:bg-[#333] focus:outline-none"
+            className="flex items-center justify-center w-full py-3 mb-8 text-white bg-[#2a2a2a] rounded-md hover:bg-[#333] focus:outline-none"
           >
             <img src="/google.png" alt="Google Icon" className="h-6 w-6 mr-2" />
             Sign Up with Google
           </button>
-          <button className="w-full py-3 mb-4 text-white bg-blue-600 rounded-md hover:bg-blue-700">
+          <button
+            className="w-1/2 py-3 mb-4 text-white rounded-md hover:bg-blue-700"
+            style={{ background: 'linear-gradient(91.73deg, #4B63DD -2.99%, rgba(5, 36, 191, 0.99) 95.8%)' }}
+          >
             Create an Account
           </button>
           <p className="text-gray-400">
@@ -37,7 +37,7 @@ export default function Login() {
           </p>
         </div>
       </div>
-      <footer className="flex items-center justify-center py-4 text-gray-500 text-sm">
+      <footer className="flex items-center justify-center py-4 text-gray-500 text-sm" style={{ background: '#121212', borderTop: '1px solid #25262B' }}>
         &copy; 2023 ReachInbox. All rights reserved.
       </footer>
     </div>
