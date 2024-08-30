@@ -1,7 +1,8 @@
 import React, { useState, useRef } from "react";
-import { ChevronDown, MoreHorizontal } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import ReplyModal from "./ReplyModal";
-import { useTheme } from "../components/theme"; // Make sure this path is correct
+import Delete from "./Delete";
+import { useTheme } from "../components/theme";
 
 interface Email {
   id: number;
@@ -22,9 +23,11 @@ interface Email {
 
 interface EmailContentProps {
   selectedEmail: Email;
+  onEmailDeleted: () => Promise<void>;
+  refreshEmailList: () => Promise<void>;
 }
 
-const EmailContent: React.FC<EmailContentProps> = ({ selectedEmail }) => {
+const EmailContent: React.FC<EmailContentProps> = ({ selectedEmail, onEmailDeleted, refreshEmailList }) => {
   const [isReplyModalOpen, setIsReplyModalOpen] = useState(false);
   const [replyContent, setReplyContent] = useState("");
   const replyButtonRef = useRef<HTMLButtonElement>(null);
@@ -33,14 +36,17 @@ const EmailContent: React.FC<EmailContentProps> = ({ selectedEmail }) => {
   const openReplyModal = () => setIsReplyModalOpen(true);
   const closeReplyModal = () => setIsReplyModalOpen(false);
 
+  const handleDelete = async () => {
+    await onEmailDeleted();
+    await refreshEmailList();
+  };
+
   const handleSendReply = async (content: string) => {
     const token = sessionStorage.getItem("bearer");
-
     if (!token) {
       console.error("No Bearer Token found.");
       return;
     }
-
     try {
       const response = await fetch(`https://hiring.reachinbox.xyz/api/v1/onebox/reply/${selectedEmail.threadId}`, {
         method: "POST",
@@ -59,16 +65,14 @@ const EmailContent: React.FC<EmailContentProps> = ({ selectedEmail }) => {
           inReplyTo: selectedEmail.inReplyTo,
         }),
       });
-
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
-
       const result = await response.json();
       console.log("Reply sent successfully:", result);
-
       setReplyContent("");
       closeReplyModal();
+      await refreshEmailList();
     } catch (error) {
       console.error("Failed to send reply:", error);
     }
@@ -92,9 +96,7 @@ const EmailContent: React.FC<EmailContentProps> = ({ selectedEmail }) => {
             <button className={`px-3 py-1 ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-200 text-black'} rounded-md`}>
               Move <ChevronDown size={16} className="inline ml-1" />
             </button>
-            <button className={`p-1 ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-200 text-black'} rounded-md`}>
-              <MoreHorizontal size={20} />
-            </button>
+            <Delete threadId={selectedEmail.threadId} onDelete={handleDelete} />
           </div>
         </div>
       </div>

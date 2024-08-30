@@ -137,6 +137,37 @@ const OneboxPage: React.FC = () => {
     }
   };
 
+  const handleEmailDeleted = async () => {
+    if (!selectedEmail) return;
+
+    try {
+      const token = sessionStorage.getItem("bearer");
+      if (!token) {
+        console.error("No Bearer Token found.");
+        return;
+      }
+
+      const response = await fetch(`https://hiring.reachinbox.xyz/api/v1/onebox/messages/${selectedEmail.threadId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      console.log('Email thread deleted successfully:', result);
+
+      setSelectedEmail(null);
+      fetchEmails();
+    } catch (error) {
+      console.error("Failed to delete email thread:", error);
+    }
+  };
+
   const renderSidebar = () => (
     <aside className="w-20 bg-black flex flex-col items-center py-6 border-r border-gray-800">
       <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center mb-8">
@@ -333,7 +364,8 @@ const OneboxPage: React.FC = () => {
       {selectedEmail ? (
         <EmailContent
           selectedEmail={selectedEmail}
-          // openReplyModal={() => setIsReplyModalOpen(true)}
+          onEmailDeleted={handleEmailDeleted}
+          refreshEmailList={fetchEmails}
         />
       ) : (
         <div className="flex-1 flex items-center justify-center text-gray-500 dark:text-gray-400">
