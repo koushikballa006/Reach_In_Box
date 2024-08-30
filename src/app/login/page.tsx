@@ -6,7 +6,7 @@ export default function Login() {
   const router = useRouter();
 
   const handleGoogleLogin = () => {
-    const frontendUrl = 'http://localhost:3000/onebox'; // Update this to your actual frontend URL in production
+    const frontendUrl = 'https://reach-in-box-ashen.vercel.app/onebox'; // Update this to your actual frontenURL in production
     const googleLoginUrl = `https://hiring.reachinbox.xyz/api/v1/auth/google-login?redirect_to=${encodeURIComponent(frontendUrl)}`;
     router.replace(googleLoginUrl);
   };
