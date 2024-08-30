@@ -169,8 +169,8 @@ const OneboxPage: React.FC = () => {
   };
 
   const renderSidebar = () => (
-    <aside className="w-20 bg-black flex flex-col items-center py-6 border-r border-gray-800">
-      <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center mb-8">
+    <aside className={`w-20 ${theme === 'dark' ? 'bg-black' : 'bg-white'} flex flex-col items-center py-6 border-r ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'}`}>
+      <div className={`w-8 h-8 ${theme === 'dark' ? 'bg-white' : 'bg-gray-200'} rounded-full flex items-center justify-center mb-8`}>
         <img
           src="/reachinbox.jpg"
           alt="Logo"
@@ -185,21 +185,23 @@ const OneboxPage: React.FC = () => {
         >
           <HomeIcon
             className={`w-8 h-8 ${
-              currentView === "home" ? "text-white" : "text-gray-500"
+              currentView === "home" 
+                ? theme === 'dark' ? "text-white" : "text-black"
+                : theme === 'dark' ? "text-gray-500" : "text-gray-400"
             }`}
           />
         </button>
         <button className="flex items-center justify-center" aria-label="Users">
-          <UserIcon className="w-8 h-8 text-gray-500" />
+          <UserIcon className={`w-8 h-8 ${theme === 'dark' ? "text-gray-500" : "text-gray-400"}`} />
         </button>
         <button className="flex items-center justify-center" aria-label="Mail">
-          <EmailIcon className="w-8 h-8 text-gray-500" />
+          <EmailIcon className={`w-8 h-8 ${theme === 'dark' ? "text-gray-500" : "text-gray-400"}`} />
         </button>
         <button className="flex items-center justify-center" aria-label="Send">
-          <SendIcon className="w-8 h-8 text-gray-500" />
+          <SendIcon className={`w-8 h-8 ${theme === 'dark' ? "text-gray-500" : "text-gray-400"}`} />
         </button>
         <button className="flex items-center justify-center" aria-label="List">
-          <ListIcon className="w-8 h-8 text-gray-500" />
+          <ListIcon className={`w-8 h-8 ${theme === 'dark' ? "text-gray-500" : "text-gray-400"}`} />
         </button>
         <button
           className="flex items-center justify-center"
@@ -208,16 +210,18 @@ const OneboxPage: React.FC = () => {
         >
           <InboxIcon
             className={`w-8 h-8 ${
-              currentView === "inbox" ? "text-white" : "text-gray-500"
+              currentView === "inbox"
+                ? theme === 'dark' ? "text-white" : "text-black"
+                : theme === 'dark' ? "text-gray-500" : "text-gray-400"
             }`}
           />
         </button>
         <button className="flex items-center justify-center" aria-label="Chart">
-          <BarChartIcon className="w-8 h-8 text-gray-500" />
+          <BarChartIcon className={`w-8 h-8 ${theme === 'dark' ? "text-gray-500" : "text-gray-400"}`} />
         </button>
       </nav>
       <div className="mt-auto">
-        <div className="w-12 h-12 bg-green-700 rounded-full flex items-center justify-center text-sm font-semibold">
+        <div className={`w-12 h-12 ${theme === 'dark' ? 'bg-green-700' : 'bg-green-500'} rounded-full flex items-center justify-center text-sm font-semibold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
           AS
         </div>
       </div>
@@ -275,10 +279,15 @@ const OneboxPage: React.FC = () => {
     <div className="w-1/4 border-r border-gray-200 dark:border-gray-800 overflow-y-auto bg-white dark:bg-black">
       <div className="p-4">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-blue-600 dark:text-blue-400">
-            All Inbox(s)
-            <ChevronDown size={16} className="inline ml-1" />
-          </h2>
+          <div>
+            <h2 className="text-lg font-semibold text-blue-600 dark:text-blue-400">
+              All Inbox(s)
+              <ChevronDown size={16} className="inline ml-1" />
+            </h2>
+            <div className="text-sm font-semibold text-black dark:text-white">
+              25/25 Inboxes selected
+            </div>
+          </div>
           <div className="flex items-center text-gray-500 dark:text-gray-400 text-sm">
             <button
               className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full"
@@ -286,9 +295,6 @@ const OneboxPage: React.FC = () => {
             >
               <RefreshCw size={20} />
             </button>
-          </div>
-          <div className="flex items-center text-gray-500 dark:text-gray-400 text-sm">
-            25/25 Inboxes selected
           </div>
         </div>
         <div className="relative mb-4">
